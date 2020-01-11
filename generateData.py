@@ -16,17 +16,15 @@
 #     { name: 'Negotiation', emoji: '🤝'},
 # ]
 import random
+import numpy as np
+import math
 
 cT = [0, 0, 1, 0, 0, 7, 1, 0, 5, 5, 0, 4, 2, 10, 5, 6, 8, 3, 3]
 bT = [0, 0, 0, 1, 3, 5, 6, 9, 4, 0, 0, 9, 7, 0, 0, 9, 2, 4, 10]
 
 
-random.seed(42)
-# with open("data.txt", 'w') as out:
-
-
 def randomWeight(tmp):
-    rand = (random.randint(0, 1000) - 500) / 1000
+    rand = np.random.normal(0, 0.2)
     tmp = round(tmp * (rand + 1), 2)
     if (tmp > 10):
         tmp = 10
@@ -35,17 +33,16 @@ def randomWeight(tmp):
     return tmp
 
 
-def generate10000(type):
+def generate(typed, num):
     coders = []
-    for x in range(10000):
-        coders.append(type.copy())
+    for x in range(num):
+        coders.append(typed.copy())
         for y in range(15):
             # generate skills
-            tmp = cT[y+4]
-            tmp = tmp + .5
+            tmp = coders[x][y+4] + .5
             coders[x][y+4] = randomWeight(tmp)
             # generate interests
-            tmp = 10 - cT[y+4]
+            tmp = 10 - coders[x][y+4]
             coders[x].append(randomWeight(tmp))
     return coders
 
@@ -54,8 +51,31 @@ def makeString(liste):
     return '\n'.join(str(e) for e in liste)
 
 
-with open("data.out", 'w') as out:
-    coders = generate10000(cT)
-    bizppl = generate10000(bT)
-    out.write(makeString(coders))
-    out.write(makeString(bizppl))
+def matches(liste):
+    labels = []
+    matches = []
+    for x in liste:
+        for y in liste:
+            if x != y:
+                diff1 = 0
+                diff2 = 0
+                # for z in range(2):
+                #     diff1 += 1 - math.sqrt((x[z+4] - y[z+6]) ** 2) / 10
+                #     diff2 += 1 - math.sqrt((y[z+4] - x[z+6]) ** 2) / 10
+                for z in range(15):
+                    diff1 += 1 - math.sqrt((x[z+4] - y[z+19]) ** 2) / 10
+                    diff2 += 1 - math.sqrt((y[z+4] - x[z+19]) ** 2) / 10
+                diff = (diff1 + diff2) / 30
+                matches.append(x + y)
+                labels.append(round(diff, 2))
+    return (matches, labels)
+
+
+with open("matches.out", 'w') as out, open("labels.out", 'w') as out2:
+    random.seed(42)
+    coders = generate(cT, 80)
+    bizppl = generate(bT, 80)
+    allP = coders + bizppl
+    finalD = matches(allP)
+    out.write(makeString(finalD[0]))
+    out2.write(makeString(finalD[1]))
