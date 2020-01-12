@@ -37,15 +37,10 @@ def cnnapi():
         fP.append(transformData(sConcat(uid, predictionArr[x])))
     fP = np.asarray(fP).astype('float32')
     rankedL = model.predict(fP)
-    returnD = {}
-    print(rankedL)
+    returnD = []
     for x in range(len(rankedL)):
-        returnD[x] = rankedL[x][0]
-    returnD = {k: v for k, v in sorted(
-        returnD.items(), key=lambda item: item[1], reverse=True)}
-    print(returnD)
-    finalAns = [k for k, v in returnD.items()]
-    return json.dumps(str(finalAns))
+        rankedD.append(rankedL[x][0])
+    return json.dumps(str(np.argsort(rankedD)))
 
 
 if __name__ == "__main__":
