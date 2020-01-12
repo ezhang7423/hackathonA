@@ -21,6 +21,8 @@ def sConcat(arr1, arr2):
 
 
 @app.route("/cnnapi", methods=["POST"])
+# need user vectors of users and filter list
+# returns sorted list of user vectors
 def cnnapi():
     uid = request.form["userinfo"]
     filters = request.form['newsfeed']
