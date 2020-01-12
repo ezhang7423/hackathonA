@@ -24,11 +24,10 @@ def sConcat(arr1, arr2):
 # need user vectors of users and filter list
 # returns sorted list of user vectors
 def cnnapi():
-    uid = request.form["userinfo"]
-    filters = request.form['newsfeed']
+    rjson = request.get_json()
+    uid = rjson['u']
+    predictionArr = rjson['o']
     model = models.load_model('model.hdf5')
-    predictionArr = json.loads(filters)[0]
-    uid = json.loads(uid)[0]
     fP = []
     for x in range(len(predictionArr)):
         fP.append(transformData(sConcat(uid, predictionArr[x])))
@@ -43,4 +42,4 @@ def cnnapi():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
