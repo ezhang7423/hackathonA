@@ -41,7 +41,7 @@ def cnnapi():
     rankedD = []
     for x in range(len(rankedL)):
         rankedD.append(rankedL[x][0])
-    return json.dumps(str(np.argsort(rankedD)[::-1]))
+    return json.dumps(str(np.argsort(rankedD)[::-1].tolist()))
 
 
 if __name__ == "__main__":
