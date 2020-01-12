@@ -3,6 +3,7 @@ from flask import request
 import keras
 import json
 import numpy as np
+import time
 
 app = Flask(__name__)
 
@@ -24,7 +25,7 @@ def sConcat(arr1, arr2):
 # need user vectors of users and filter list
 # returns sorted list of user vectors
 def cnnapi():
-
+    start = time.time()
     print('received request')
     rjson = request.get_json()
     uid = rjson['u']
@@ -43,6 +44,9 @@ def cnnapi():
     for x in range(len(rankedL)):
         rankedD.append(rankedL[x][0])
     keras.backend.clear_session()
+    end = time.time()
+    with open("times.txt", 'w') as times:
+        times.write(str(end-start))
     return json.dumps(np.argsort(rankedD)[::-1].tolist())
 
 
