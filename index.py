@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-from keras import models
+import keras
 import json
 import numpy as np
 
@@ -31,7 +31,7 @@ def cnnapi():
     print(uid, predictionArr)
     print('starting prediction')
     print(len(predictionArr[0]))
-    model = models.load_model('model.hdf5')
+    model = keras.models.load_model('model.hdf5')
     fP = []
     for x in range(len(predictionArr)):
         fP.append(transformData(sConcat(uid, predictionArr[x])))
@@ -41,7 +41,8 @@ def cnnapi():
     rankedD = []
     for x in range(len(rankedL)):
         rankedD.append(rankedL[x][0])
-    return json.dumps(str(np.argsort(rankedD)[::-1].tolist()))
+    keras.backend.clear_session()
+    return json.dumps(np.argsort(rankedD)[::-1].tolist())
 
 
 if __name__ == "__main__":
