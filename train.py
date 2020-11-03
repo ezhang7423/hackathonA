@@ -1,5 +1,8 @@
 # %%
 import numpy
+from keras import models
+from keras import layers
+
 
 with open("matches.out", 'r') as data, open("labels.out", 'r') as labels:
     data = data.read().splitlines()
@@ -64,8 +67,6 @@ x_test -= mean
 x_test /= std
 
 # %%
-from keras import models
-from keras import layers
 
 
 def build_model():

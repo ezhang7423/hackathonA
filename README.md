@@ -4,7 +4,8 @@
 
 ```bash
 python3 -m venv ai
-source ai/bin/activate
+source ai/bin/activate.fish
+pip install wheel
 pip install -r requirements.txt
 python index.py
 ```

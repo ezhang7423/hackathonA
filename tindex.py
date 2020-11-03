@@ -7,7 +7,7 @@ import numpy as np
 import time
 
 app = Flask(__name__)
-
+model = keras.models.load_model('model.hdf5')
 
 def transformData(array):
     x_train = np.asarray(array).astype('float32')
@@ -33,8 +33,7 @@ def cnnapi():
     predictionArr = rjson['o']
     print(uid, predictionArr)
     print('starting prediction')
-    print(len(predictionArr[0]))
-    model = keras.models.load_model('model.hdf5')
+    print(len(predictionArr[0]))    
     fP = []
     for x in range(len(predictionArr)):
         fP.append(transformData(sConcat(uid, predictionArr[x])))
